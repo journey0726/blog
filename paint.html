@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <canvas style="border: 1px solid #ccc" id="canvas" width="500" height="500"></canvas>
+    <button class="button" onclick='paint()'>画笔</button>
+    <button class="button" onclick='eraser()'>橡皮</button>
+  </div>
+</body>
+<script>
+  let canvas = document.getElementById('canvas')
+  let flag = true
+  ctx = canvas.getContext('2d')
+
+  ctx.lineWidth = "10";
+  canvas.onmousedown = (e) => {
+    ctx.beginPath()
+    ctx.moveTo(e.offsetX, e.offsetY)
+    canvas.onmousemove = (e) => {
+      if (flag) {
+        ctx.strokeStyle = '#000';
+        ctx.lineTo(e.offsetX, e.offsetY)
+        ctx.stroke();
+      } else {
+        ctx.arc(e.offsetX, e.offsetY, 5, 0, 2 * Math.PI);
+        ctx.closePath();
+        ctx.fillStyle = 'white';
+        ctx.fill();
+      }
+    }
+  }
+  canvas.onmouseup = (e) => {
+    canvas.onmousemove = null
+  }
+  const paint = () => {
+    flag = true
+  }
+  const eraser = () => {
+    flag = false
+  }
+</script>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  video {
+    height: 270px;
+    width: 495px;
+  }
+</style>
+
+<body>
+  <div>
+    <video src="./test.mp4" autoplay></video>
+    <canvas style="border: 1px solid #ccc" id="canvas1" width="495" height="270"></canvas>
+    <canvas style="border: 1px solid #ccc" id="canvas2" width="495" height="270"></canvas>
+  </div>
+</body>
+<script>
+  let video = document.getElementsByTagName('video')[0]
+  video.onclick = () => {
+    video.play()
+    animation()
+  }
+  let canvas1 = document.getElementById('canvas1')
+  let canvas2 = document.getElementById('canvas2')
+  let ctx1 = canvas1.getContext('2d')
+  let ctx2 = canvas1.getContext('2d')
+  
+  const animation = () => {
+    requestAnimationFrame(animation)
+    ctx1.drawImage(video, 0, 0, 495, 270)
+    const data = ctx1.getImageData(0, 0, 495, 270).data
+    ctx2.clearRect(0, 0, 495, 270)
+    const bl = 2
+    ctx2.font = '12px serif'
+    for (let i = 0; i < data.length; i += 4 * bl) {
+      const x = parseInt((i + 1) % (495 * 4) / 4)
+      const y = parseInt(i / (495  * 4 ))
+      if (x % bl === 0 && y % bl === 0) {
+        const g = parseInt(data[i] + data[i + 1] + data[i + 2]/ 1.5) 
+        ctx2.fillStyle = `rgba(${g},${g},${g},${data[i + 3]})`
+        ctx2.fillText('.', x, y )
+      }
+    }
+  }
+</script>
+
+</html>
